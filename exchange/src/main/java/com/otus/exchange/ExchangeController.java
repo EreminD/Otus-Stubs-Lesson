@@ -1,6 +1,5 @@
 package com.otus.exchange;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,7 @@ public class ExchangeController {
         System.out.println("===>" + request);
         double feeCharge = request.getAmountInCcy1()*fee;
         double totalToDeal = request.getAmountInCcy1() - feeCharge;
-        double totalChanged = request.getAmount() * totalToDeal/request.getAmountInCcy1();
+        double totalChanged = request.getSize() * totalToDeal/request.getAmountInCcy1();
         DealResponse response = new DealResponse(request.getPair(), totalChanged, feeCharge);
         System.out.println("<===" + response);
         return ResponseEntity.ok(response);

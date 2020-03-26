@@ -1,21 +1,19 @@
 package ru.otus.model;
 
-import ru.otus.model.CcyPairs;
-
 import java.io.Serializable;
 
 public class DealRequest implements Serializable {
     private CcyPairs pair;
     private double amountInCcy1;
-    private long amount;
+    private long size;
 
     public DealRequest() {
     }
 
-    public DealRequest(CcyPairs pair, double amountInCcy1, long amount) {
+    public DealRequest(CcyPairs pair, double amountInCcy1, long size) {
         this.pair = pair;
         this.amountInCcy1 = amountInCcy1;
-        this.amount = amount;
+        this.size = size;
     }
 
     public CcyPairs getPair() {
@@ -34,12 +32,12 @@ public class DealRequest implements Serializable {
         this.amountInCcy1 = amountInCcy1;
     }
 
-    public long getAmount() {
-        return amount;
+    public long getSize() {
+        return size;
     }
 
-    public void setAmount(long amount) {
-        this.amount = amount;
+    public void setSize(long size) {
+        this.size = size;
     }
 
     @Override
@@ -47,7 +45,7 @@ public class DealRequest implements Serializable {
         return "DealRequest{" +
                 "pair=" + pair +
                 ", amountInCcy1=" + amountInCcy1 +
-                ", amount=" + amount +
+                ", amount=" + size +
                 '}';
     }
 }

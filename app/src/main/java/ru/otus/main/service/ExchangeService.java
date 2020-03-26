@@ -20,8 +20,8 @@ public class ExchangeService {
     private String exchangeUrl;
 
 
-    public DealResponse newDeal(CcyPairs pair, PriceFeed priceFeed, long amount) {
-        DealRequest deal = new DealRequest(pair, priceFeed.getPrice()*amount, amount);
+    public DealResponse newDeal(CcyPairs pair, PriceFeed priceFeed, long size) {
+        DealRequest deal = new DealRequest(pair, priceFeed.getPrice()* size, size);
         return rest.postForObject(exchangeUrl, deal, DealResponse.class, Collections.EMPTY_LIST);
     }
 }
