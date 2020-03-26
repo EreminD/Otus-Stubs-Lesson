@@ -16,4 +16,12 @@ public enum CcyPairs {
     public String pair() {
         return ccyPair;
     }
+
+    public String getFirst(){
+        return ccyPair.split("/")[0];
+    }
+
+    public String getSecond(){
+        return ccyPair.split("/")[1];
+    }
 }

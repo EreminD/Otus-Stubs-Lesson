@@ -1,6 +1,7 @@
 package ru.otus.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class DealResponse implements Serializable {
     private CcyPairs pair;
@@ -47,5 +48,21 @@ public class DealResponse implements Serializable {
                 ", totalChanged=" + totalChanged +
                 ", feeCharge=" + feeCharge +
                 '}';
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DealResponse response = (DealResponse) o;
+        return Double.compare(response.totalChanged, totalChanged) == 0 &&
+                Double.compare(response.feeCharge, feeCharge) == 0 &&
+                pair == response.pair;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pair, totalChanged, feeCharge);
     }
 }

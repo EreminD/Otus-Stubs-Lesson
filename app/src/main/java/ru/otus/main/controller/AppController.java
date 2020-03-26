@@ -1,6 +1,7 @@
 package ru.otus.main.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.main.model.ChangeCurrencyRequest;
@@ -17,6 +18,13 @@ public class AppController {
     @PostMapping()
     public ResponseEntity<DealResponse> change(@RequestBody ChangeCurrencyRequest request) {
         CcyPairs ccyPair = CcyPairs.valueOf(request.getCcyTo() + "_" + request.getCcyFrom());
-        return ResponseEntity.ok(service.change(ccyPair, request.getAmount()));
+        try {
+            DealResponse change = service.change(ccyPair, request.getSize());
+            return ResponseEntity.ok(change);
+        } catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
     }
 }

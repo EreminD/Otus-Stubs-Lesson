@@ -14,9 +14,26 @@ public class AppService {
     @Autowired
     private ExchangeService exchange;
 
-    public DealResponse change(CcyPairs pair, long amount){
+    @Autowired
+    private WalletService wallet;
+
+    public DealResponse change(CcyPairs pair, long size){
+        // get price info
         PriceFeed priceFeed = feeds.getPrice(pair);
-        DealResponse response = exchange.newDeal(pair, priceFeed, amount);
+
+        //withdraw
+        String paymentCcy = pair.getSecond();
+        double paymentAmount = priceFeed.getPrice() * size;
+        wallet.withdraw(paymentCcy, paymentAmount);
+
+        //deal
+        DealResponse response = exchange.newDeal(pair, priceFeed, size);
+
+        //fill wallet
+        String incomingCcy = response.getPair().getFirst();
+        double incomingAmount = response.getTotalChanged();
+        wallet.add(incomingCcy, incomingAmount);
+
         return response;
     }
 }
