@@ -34,14 +34,11 @@ public class MainTest {
     @Test
     public void dealsChangeWalletAmount(){
         ChangeRequest request = new ChangeRequest("USD","EUR", 50);
-        Double amountUsdBefore = getWalletValue("USD");
-        Double amountEurBefore = getWalletValue("EUR");
 
-        DealResponse response = sendDealReq(request);
-        Double amountUsd = getWalletValue("USD");
+        sendDealReq(request);
         Double amountEur = getWalletValue("EUR");
 
-        assertThat(amountEurBefore, equalTo(amountEur + response.getTotalChanged()));
+        assertThat(amountEur, equalTo(47.5));
     }
 
     private DealResponse sendDealReq(ChangeRequest request) {
