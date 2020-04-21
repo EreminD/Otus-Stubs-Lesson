@@ -3,11 +3,15 @@ package ru.otus.open.tests;
 import io.restassured.http.ContentType;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import ru.otus.model.CcyPairs;
 import ru.otus.model.DealRequest;
 import ru.otus.model.DealResponse;
 import ru.otus.model.PriceFeed;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -16,16 +20,13 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class MainTest {
-
     @Test
     public void shouldReturnFeeAndSizeInfo() {
         //Arrange
         ChangeRequest request = new ChangeRequest("RUB", "USD", 100);
         DealResponse responseToBe = new DealResponse(CcyPairs.USD_RUB, 99d, 81.05);
-
         //Act
         DealResponse responseAsIs = sendDealReq(request);
-
         //Assert
         assertThat(responseAsIs, equalTo(responseToBe));
     }
@@ -42,8 +43,8 @@ public class MainTest {
 
     private DealResponse sendDealReq(ChangeRequest request) {
         return given().baseUri("http://localhost:8081/api")
-                .contentType(ContentType.JSON).body(request)
-                .when().post("/change")
+                        .contentType(ContentType.JSON).body(request)
+                        .when().post("/change")
                 .then().statusCode(200)
                 .extract().as(DealResponse.class);
     }
@@ -55,7 +56,6 @@ public class MainTest {
                 .then().statusCode(200)
                 .extract().body().jsonPath().getDouble(ccy);
     }
-
 
 
 
@@ -74,6 +74,21 @@ public class MainTest {
         assertThat(responseAsIs, equalTo(null));
     }
 
+
+    private void setNewFeed(PriceFeed feed) {
+        given().baseUri("http://localhost:8095/stub/feed/add")
+                .contentType(ContentType.JSON).body(feed)
+                .when().post().then().statusCode(200);
+    }
+
+
+
+
+
+
+
+
+
     @Test
     public void sendToExchangeSizeMultPrice(){
         PriceFeed feed = new PriceFeed("EUR/RUB", 90);
@@ -90,14 +105,11 @@ public class MainTest {
     }
 
 
-    private void setNewFeed(PriceFeed feed) {
-        given().baseUri("http://localhost:8090/stub/feed/add").contentType(ContentType.JSON).body(feed)
-                .when().post().then().statusCode(200);
-    }
+
 
 
     private StubCall[] getHistory(){
-        return given().baseUri("http://localhost:8090/history")
+        return given().baseUri("http://localhost:8095/history")
                 .accept(ContentType.JSON)
                 .when().get()
                 .then().statusCode(200)
@@ -105,7 +117,7 @@ public class MainTest {
     }
 
     private void clearHistory(){
-        given().baseUri("http://localhost:8090/history/clear")
+        given().baseUri("http://localhost:8095/history/clear")
                 .accept(ContentType.JSON)
                 .when().delete()
                 .then().statusCode(200);

@@ -1,6 +1,7 @@
 package ru.otus.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class DealRequest implements Serializable {
     private CcyPairs pair;
@@ -47,5 +48,20 @@ public class DealRequest implements Serializable {
                 ", amountInCcy1=" + amountInCcy1 +
                 ", amount=" + size +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DealRequest that = (DealRequest) o;
+        return Double.compare(that.amountInCcy1, amountInCcy1) == 0 &&
+                size == that.size &&
+                pair == that.pair;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pair, amountInCcy1, size);
     }
 }
